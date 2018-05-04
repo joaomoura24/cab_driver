@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- debug flag -->
+    <arg name="debug" default="false" />
+    <arg unless="$(arg debug)" name="launch_prefix" value="" />
+    <arg if="$(arg debug)" name="launch_prefix" value="xterm -e gdb --args" />
+	<param name="robot_description" textfile="$(find hardware)/urdf/cab.urdf" />
+    <!-- driver -->
+    <node launch-prefix="$(arg launch_prefix)" name="motors_driver" pkg="cab_driver" type="motors_driver" output="screen" required="true">
+		<rosparam param="toolLink"> "contact_point" </rosparam>
+		<rosparam param="port"> "/dev/ttyACM0" </rosparam>
+		<rosparam param="baudrate"> 230400 </rosparam>
+		<rosparam param="freq"> 100.0 </rosparam>
+    </node>
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub__" />
+</launch>
